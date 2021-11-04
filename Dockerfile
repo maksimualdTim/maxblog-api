@@ -12,3 +12,6 @@ WORKDIR /var/www
 
 COPY composer.json composer.lock ./
 RUN composer install --no-scripts --no-interaction
+COPY ./ ./
+RUN chmod -R 775 /var/www/bootstrap
+RUN chmod -R 775 /var/www/storage
