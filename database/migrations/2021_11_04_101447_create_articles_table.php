@@ -19,8 +19,7 @@ class CreateArticlesTable extends Migration
             $table->string('title');
             $table->text('shortText');
             $table->text('text');
-            $table->foreignId('preview')->constrained('files', 'id');
-            $table->foreignId('category')->constrained('categories', 'id');
+            $table->foreignId('category_id')->constrained('categories', 'id');
             $table->bigInteger('views')->default(0);
             $table->float('rating')->nullable();
             $table->timestamps();
