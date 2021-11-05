@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,33 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
+    {
+        $builder = Article::query()->with('preview')->with('category');
+        $filters = $request->all();
+
+        foreach ($filters as $filter => $value) {
+            switch ($filter){
+                case 'category_id':
+                    $builder->where('category_id', '=', $value);
+                    break;
+                case 'last':
+                    $builder->orderBy('created_at', 'desc')->take($value);
+                    break;
+                case 'first':
+                    $builder->orderBy('created_at', 'asc')->take($value);
+                    break;
+                case 'views':
+                    $builder->orderBy('views', $value);
+                    break;
+                case 'rating':
+                    $builder->orderBy('rating', $value);
+                    break;
+            }
+        }
+        return $builder->get();
+    }
+    public function mappingById()
     {
 
     }
@@ -46,7 +73,11 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
-        //
+        return [
+            'data' => $article,
+            'files' => $article->files()->get(),
+            'preview_data' => $article->preview()->get(),
+        ];
     }
 
     /**
