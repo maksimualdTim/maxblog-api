@@ -16,16 +16,21 @@ class GoodsFactory extends Factory
     public function definition()
     {
         return [
-            'category' => function () {
-                return Category::factory()->create()->id;
-            },
+            'category' => $this->foreignKeyRandomItem(Category::class),
             'name' => $this->faker->asciify('********************'),
             'shortDesc' => $this->faker->text(500),
             'fullDesc' => $this->faker->text(1000),
-            'preview' => function () {
-                return File::factory()->create()->id;
-            },
+            'preview' => $this->foreignKeyRandomItem(File::class),
             'price' => $this->faker->randomFloat(2, 1, 100),
         ];
+    }
+    private function foreignKeyRandomItem($class)
+    {
+        $object = $class::all();
+        if($object->count() !== 0){
+            return rand(1, $object->count());
+        }else{
+            return $class::factory()->create()->id;
+        }
     }
 }

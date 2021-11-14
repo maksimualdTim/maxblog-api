@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ArticleResource;
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -39,7 +40,7 @@ class ArticleController extends Controller
         }
         return $builder->get();
     }
-    public function mappingById()
+    public function mappingById($article)
     {
 
     }
@@ -112,5 +113,24 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         //
+    }
+    public function allCategories(Request $request)
+    {
+        $categories = Category::all();
+        $count = $request->input('last') ?? 6;
+
+        $posts = [];
+        foreach ($categories as $category) {
+            $posts[$category->name] = Article::where('category_id', '=', $category->id)
+                ->with('preview')
+                ->with('category')
+                ->orderByDesc('created_at')
+                ->take($count)->get();
+        }
+        return $posts;
+    }
+    public function lastPost()
+    {;
+        return Article::latest()->first()->get();
     }
 }

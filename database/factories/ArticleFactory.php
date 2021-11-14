@@ -56,9 +56,6 @@ class ArticleFactory extends Factory
                 if($file->count() !== 0){
                     $article->update(['preview' => $id]);
                     $file->update(['article_id' => $article->id]);
-
-                    $file::save();
-                    $article::save();
                 }
             }
         });

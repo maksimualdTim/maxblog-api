@@ -6,6 +6,7 @@ use \App\Http\Controllers\ArticleController;
 use \App\Http\Controllers\FileController;
 use \App\Http\Controllers\CommentController;
 use \App\Http\Controllers\GoodsController;
+use \App\Http\Controllers\CategoryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +24,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::resource('articles', ArticleController::class);
+Route::resource('categories', CategoryController::class);
 Route::resource('file', FileController::class);
 Route::resource('comments', CommentController::class);
 Route::resource('goods', GoodsController::class);
+
+Route::get('/articles/all/categories', [ArticleController::class, 'allCategories']);
+Route::get('/articles/latest/post', [ArticleController::class, 'lastPost']);

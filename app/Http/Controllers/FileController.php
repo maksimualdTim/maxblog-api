@@ -35,7 +35,10 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->file('image')->store('uploads', 'public');
+
+        return 'success';
+
     }
 
     /**
